@@ -41,7 +41,43 @@ def get_example_1_differential_equation() -> OrdinaryDifferentialEquation:
     )
 
 
+def get_some_differential_equation() -> OrdinaryDifferentialEquation:
+    return OrdinaryDifferentialEquation(        # interval [0,1] start_point (0,1) step 0.2
+        TwoVariableFunction(
+            "-2y",
+            lambda x, y: -2*y
+        ),
+        TwoVariableFunction(
+            "y / e^(-2x)",
+            lambda x, y: y / math.exp(-2*x)
+        ),
+        TwoVariableFunction(
+            "c * e^(-2x)",
+            lambda x, c: c * math.exp(-2*x)
+        )
+    )
+
+
+def get_some_some_differential_equation() -> OrdinaryDifferentialEquation:
+    return OrdinaryDifferentialEquation(        # interval [1,1.5] start_point (1,0.5) step 0.1
+        TwoVariableFunction(
+            "-y/x",
+            lambda x, y: -y/x
+        ),
+        TwoVariableFunction(
+            "x*y",
+            lambda x, y: x * y
+        ),
+        TwoVariableFunction(
+            "c/x",
+            lambda x, c: c/x
+        )
+    )
+
+
 def get_all_differential_equations() -> list[OrdinaryDifferentialEquation]:
     return [
-        get_example_1_differential_equation()
+        get_example_1_differential_equation(),
+        get_some_differential_equation(),
+        get_some_some_differential_equation()
     ]
