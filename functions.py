@@ -51,5 +51,8 @@ class TwoVariableFunction:
     def at(self, x: float, y: float) -> float:
         return self._func(x, y)
 
+    def string(self):
+        return self._string
+
     def __str__(self):
         return "function: (" + self._string + ")"
