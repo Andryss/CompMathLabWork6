@@ -1,5 +1,3 @@
-import math
-
 from differential_equations import *
 
 
@@ -179,7 +177,7 @@ class MaxDifferenceSolver:
         precision = 0
         table = result.approximated_values_table.table()
         for i in range(table.shape[0]):
-            precision = max(precision, abs(info.equation.answer_at(table['x'][i]) - table['y'][i]))
+            precision = max(precision, abs(table['y'][i] - info.equation.answer_at(table['x'][i], info.start_point)))
         return precision
 
     @staticmethod
