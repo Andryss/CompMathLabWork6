@@ -119,23 +119,45 @@ class RungeRuleSolver:
         return precision
 
     @staticmethod
-    def solve_with_precision(solver: DifferentialEquationSolver, info: DifferentialEquationInfo,
-                             precision: float, max_iterations: int = 100) -> (SolveResultEntity, float):
+    def solve_with_precision(solver: SequentialDifferentialEquationSolver, info: DifferentialEquationInfo,
+                             max_iterations: int = 100) -> SolveResultEntity:
         start_step_size = info.step_size
-        prev_result = solver.solve(info.start_point, info.interval, start_step_size)
+        prev_result = solver.solve(info.equation, info.start_point, info.interval, start_step_size)
         if not isinstance(prev_result, SolveResultEntitySuccess):
-            return prev_result, None
+            return prev_result
+
         for i in range(max_iterations):
             start_step_size /= 2
-            cur_result = solver.solve(info.start_point, info.interval, start_step_size)
+            cur_result = solver.solve(info.equation, info.start_point, info.interval, start_step_size)
             if not isinstance(cur_result, SolveResultEntitySuccess):
-                return cur_result, None
+                return cur_result
             cur_precision = RungeRuleSolver.get_precision(prev_result, cur_result, solver.p)
-            if cur_precision < precision:
-                return cur_result, start_step_size
+            if cur_precision < info.precision:
+                return cur_result
             prev_result = cur_result
-        raise Exception(f"can't reach precision {precision}: max number of iterations reached")
+
+        result = SolveResultEntityError()
+        result.name = "error " + solver.name
+        result.error = Exception(f"can't reach precision {info.precision}: "
+                                 f"max number of iterations ({max_iterations}) reached")
+        return result
+
+
+def get_all_differential_equation_solvers() -> list[DifferentialEquationSolver]:
+    return [
+        NewtonSolver(),
+        ModifiedNewtonSolver(),
+        RungeKuttaSolver()
+    ]
 
 
 def solve_equation(info: DifferentialEquationInfo) -> SolveResult:
-    pass
+    result = SolveResult()
+    result.src_equation = info
+    results = []
+    for solver in get_all_differential_equation_solvers():
+        if isinstance(solver, SequentialDifferentialEquationSolver):
+            results.append(RungeRuleSolver.solve_with_precision(solver, info))
+        else:
+            raise Exception("faced with unusual type of solver")
+    return result
