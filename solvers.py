@@ -51,6 +51,11 @@ class DifferentialEquationSolver:
                 'y': y_vals
             }))
             return result
+        except OverflowError as _:
+            result = SolveResultEntityError()
+            result.name = "error " + self.name
+            result.error = Exception("Overflow error (probably function is inf on the given interval)")
+            return result
         except Exception as e:
             result = SolveResultEntityError()
             result.name = "error " + self.name
