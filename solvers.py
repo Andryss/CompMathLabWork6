@@ -142,7 +142,10 @@ class RungeRuleSolver:
     def get_precision(first: SolveResultEntitySuccess, second: SolveResultEntitySuccess, p: float) -> float:
         first_values, second_values = first.approximated_values_table.y_values(), \
                                       second.approximated_values_table.y_values()
-        precision = abs(first_values[1] - first_values[2]) / (2 ** p - 1)
+        # precision = abs(first_values[1] - second_values[2]) / (2 ** p - 1)
+        precision = 0.0
+        for i in range(1, first_values.shape[0]):
+            precision = max(precision, abs(first_values[i] - second_values[2*i]) / (2 ** p - 1))
         return precision
 
     @staticmethod
