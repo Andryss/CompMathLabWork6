@@ -25,7 +25,7 @@ class OrdinaryDifferentialEquation:
 
 
 def get_example_1_differential_equation() -> OrdinaryDifferentialEquation:
-    return OrdinaryDifferentialEquation(        # interval [1,1.5] start_point (1,-1) step 0.1
+    return OrdinaryDifferentialEquation(
         TwoVariableFunction(
             "y + (1 + x) * y^2",
             lambda x, y: y + (1 + x) * y**2
@@ -41,8 +41,8 @@ def get_example_1_differential_equation() -> OrdinaryDifferentialEquation:
     )
 
 
-def get_some_differential_equation() -> OrdinaryDifferentialEquation:
-    return OrdinaryDifferentialEquation(        # interval [0,1] start_point (0,1) step 0.2
+def get_example_2_differential_equation() -> OrdinaryDifferentialEquation:
+    return OrdinaryDifferentialEquation(
         TwoVariableFunction(
             "-2y",
             lambda x, y: -2*y
@@ -58,8 +58,8 @@ def get_some_differential_equation() -> OrdinaryDifferentialEquation:
     )
 
 
-def get_some_some_differential_equation() -> OrdinaryDifferentialEquation:
-    return OrdinaryDifferentialEquation(        # interval [1,1.5] start_point (1,0.5) step 0.1
+def get_example_3_differential_equation() -> OrdinaryDifferentialEquation:
+    return OrdinaryDifferentialEquation(
         TwoVariableFunction(
             "-y/x",
             lambda x, y: -y/x
@@ -75,9 +75,27 @@ def get_some_some_differential_equation() -> OrdinaryDifferentialEquation:
     )
 
 
+def get_example_4_differential_equation() -> OrdinaryDifferentialEquation:
+    return OrdinaryDifferentialEquation(
+        TwoVariableFunction(
+            "(x - y)^2 + 1",
+            lambda x, y: (x - y)**2 + 1
+        ),
+        TwoVariableFunction(
+            "1/(y - x) + x",
+            lambda x, y: 1/(y - x) + x
+        ),
+        TwoVariableFunction(
+            "1/(c - x) + x",
+            lambda x, c: 1/(c - x) + x
+        )
+    )
+
+
 def get_all_differential_equations() -> list[OrdinaryDifferentialEquation]:
     return [
         get_example_1_differential_equation(),
-        get_some_differential_equation(),
-        get_some_some_differential_equation()
+        get_example_2_differential_equation(),
+        get_example_3_differential_equation(),
+        get_example_4_differential_equation()
     ]
