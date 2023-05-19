@@ -109,7 +109,10 @@ def print_result(result: SolveResult, info: DifferentialEquationInfo):
         print_result_entity(micro_result)
     if read_show_all():
         for micro_result in result.solving_results:
-            show_result_entity(micro_result, info)
+            try:
+                show_result_entity(micro_result, info)
+            except Exception as e:
+                print(f"Can't show result: {e.__str__()}")
 
 
 def run():

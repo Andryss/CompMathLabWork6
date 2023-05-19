@@ -62,6 +62,7 @@ class DifferentialEquationSolver:
             result.error = Exception("Overflow error (probably function is inf on the given interval)")
             return result
         except Exception as e:
+            print(e.__class__)
             result = SolveResultEntityError()
             result.name = "error " + self.name
             result.error = e
@@ -229,9 +230,21 @@ def solve_equation(info: DifferentialEquationInfo) -> SolveResult:
     results = []
     for solver in get_all_differential_equation_solvers():
         if isinstance(solver, OneStepDifferentialEquationSolver):
-            results.append(RungeRuleSolver.solve_with_precision(solver, info))
+            try:
+                results.append(RungeRuleSolver.solve_with_precision(solver, info))
+            except Exception as e:
+                res = SolveResultEntityError()
+                res.name = "critical error " + solver.name
+                res.error = Exception(f"RungeRuleSolver can't resolve equation: {e.__str__()}")
+                results.append(res)
         elif isinstance(solver, MultiStepDifferentialEquationSolver):
-            results.append(MaxDifferenceSolver.solve_with_precision(solver, info))
+            try:
+                results.append(MaxDifferenceSolver.solve_with_precision(solver, info))
+            except Exception as e:
+                res = SolveResultEntityError()
+                res.name = "critical error " + solver.name
+                res.error = Exception(f"MaxDifferenceSolver can't resolve equation: {e.__str__()}")
+                results.append(res)
         else:
             raise Exception("faced with unusual type of solver")
     result.solving_results = results
