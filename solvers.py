@@ -148,7 +148,8 @@ class RungeRuleSolver:
         # precision = abs(first_values[1] - second_values[2]) / (2 ** p - 1)
         precision = 0.0
         for i in range(1, first_values.shape[0]):
-            precision = max(precision, abs(first_values[i] - second_values[2*i]) / (2 ** p - 1))
+            # precision = max(precision, abs(first_values[i] - second_values[2*i]) / (2 ** p - 1))
+            precision = max(precision, abs(first_values[i] - second_values[2 * i]))
         return precision
 
     @staticmethod
