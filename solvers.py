@@ -51,6 +51,11 @@ class DifferentialEquationSolver:
                 'y': y_vals
             }))
             return result
+        except ZeroDivisionError as _:
+            result = SolveResultEntityError()
+            result.name = "error " + self.name
+            result.error = Exception("Division by zero error (probably function isn't defined on the given interval)")
+            return result
         except OverflowError as _:
             result = SolveResultEntityError()
             result.name = "error " + self.name
@@ -142,13 +147,14 @@ class AdamsSolver(MultiStepDifferentialEquationSolver):
 class RungeRuleSolver:
 
     @staticmethod
-    def get_precision(first: SolveResultEntitySuccess, second: SolveResultEntitySuccess, p: float) -> float:
+    def get_precision(first: SolveResultEntitySuccess, second: SolveResultEntitySuccess,
+                      solver: OneStepDifferentialEquationSolver) -> float:
         first_values, second_values = first.approximated_values_table.y_values(), \
                                       second.approximated_values_table.y_values()
         # precision = abs(first_values[1] - second_values[2]) / (2 ** p - 1)
         precision = 0.0
         for i in range(1, first_values.shape[0]):
-            # precision = max(precision, abs(first_values[i] - second_values[2*i]) / (2 ** p - 1))
+            # precision = max(precision, abs(first_values[i] - second_values[2*i]) / (2 ** solver.p - 1))
             precision = max(precision, abs(first_values[i] - second_values[2 * i]))
         return precision
 
@@ -165,7 +171,7 @@ class RungeRuleSolver:
             cur_result = solver.solve(info.equation, info.start_point, info.interval, start_step_size)
             if not isinstance(cur_result, SolveResultEntitySuccess):
                 return cur_result
-            cur_precision = RungeRuleSolver.get_precision(prev_result, cur_result, solver.p)
+            cur_precision = RungeRuleSolver.get_precision(prev_result, cur_result, solver)
             if cur_precision < info.precision:
                 return cur_result
             prev_result = cur_result
