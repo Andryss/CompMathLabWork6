@@ -39,9 +39,7 @@ class DifferentialEquationSolver:
             x_vals, y_vals = [start_point[0]], [start_point[1]]
             n = math.floor(round((interval[1] - interval[0]) / step_size, 3))
 
-            pointer = start_point[0]
             for i in range(n):
-                pointer += step_size
                 x_new, y_new = self.get_next_values(x_vals, y_vals, step_size, equation)
                 x_vals.append(x_new)
                 y_vals.append(y_new)
