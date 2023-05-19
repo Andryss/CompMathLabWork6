@@ -39,30 +39,20 @@ def read_differential_equation() -> OrdinaryDifferentialEquation:
         raise Exception(f"can't read differential equation: {e.__str__()}")
 
 
-def read_start_point() -> [float, float]:
-    line = input("\nEnter the start point (like \"<x> <y>\"):\n").strip()
-    interval: [float, float]
-    try:
-        interval = [float(x) for x in line.split()]
-        if len(interval) != 2:
-            raise Exception("not a start point")
-        return interval
-    except Exception as e:
-        raise Exception(f"can't read start point: {e.__str__()}")
-
-
-def read_interval(start_point: (float, float)) -> [float, float]:
-    line = input(f"\nEnter the interval boundaries (interval must start with {start_point[0]}):\n").strip()
+def read_interval() -> [float, float]:
+    line = input(f"\nEnter the interval boundaries:\n").strip()
     interval: [float, float]
     try:
         interval = [float(x) for x in line.split()]
         if len(interval) != 2 or interval[1] < interval[0]:
             raise Exception("not an interval")
-        if interval[0] != start_point[0]:
-            raise Exception("can't")
         return interval
     except Exception as e:
         raise Exception(f"can't read interval: {e.__str__()}")
+
+
+def read_start_point_value() -> float:
+    return read_float_from_console("function value in the left most interval point (start value)")
 
 
 def read_step_size() -> float:
@@ -126,8 +116,8 @@ def run():
     try:
         equation_info = DifferentialEquationInfo()
         equation_info.equation = read_differential_equation()
-        equation_info.start_point = read_start_point()
-        equation_info.interval = read_interval(equation_info.start_point)
+        equation_info.interval = read_interval()
+        equation_info.start_point = (equation_info.interval[0], read_start_point_value())
         equation_info.step_size = read_step_size()
         equation_info.precision = read_precision()
         result = solve_equation(equation_info)
