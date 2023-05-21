@@ -105,14 +105,15 @@ def show_result_entity(micro_result: SolveResultEntity, info: DifferentialEquati
 
 def print_result(result: SolveResult, info: DifferentialEquationInfo):
     print("\nHere is the computation result:")
+    successful_entity_count = 0
     for micro_result in result.solving_results:
+        if isinstance(micro_result, SolveResultEntitySuccess):
+            successful_entity_count += 1
         print_result_entity(micro_result)
-    if read_show_all():
-        for micro_result in result.solving_results:
-            try:
+    if successful_entity_count > 0:
+        if read_show_all():
+            for micro_result in result.solving_results:
                 show_result_entity(micro_result, info)
-            except Exception as e:
-                print(f"Can't show result: {e.__str__()}")
 
 
 def run():
