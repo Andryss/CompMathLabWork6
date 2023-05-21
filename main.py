@@ -123,6 +123,11 @@ def run():
         equation_info.interval = read_interval()
         equation_info.start_point = (equation_info.interval[0], read_start_point_value())
         equation_info.step_size = read_step_size()
+
+        steps_count = (equation_info.interval[1] - equation_info.interval[0]) / equation_info.step_size
+        if steps_count > 50_000:
+            raise Exception(f"too many steps ({steps_count})")
+
         equation_info.precision = read_precision()
         result = solve_equation(equation_info)
         print_result(result, equation_info)
