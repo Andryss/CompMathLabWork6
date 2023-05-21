@@ -145,6 +145,22 @@ class AdamsSolver(MultiStepDifferentialEquationSolver):
         return x_new, y_new
 
 
+class MilneSolver(MultiStepDifferentialEquationSolver):
+    name = "milne solver"
+    k = 4
+
+    def get_next_values_extensible(self, x_vals: list[float], y_vals: list[float], step_size: float,
+                                   equation: OrdinaryDifferentialEquation) -> (float, float):
+        x_new = x_vals[-1] + step_size
+        f_i_3, f_i_2, f_i_1 = equation.at(x_vals[-3], y_vals[-3]), equation.at(x_vals[-2], y_vals[-2]), \
+            equation.at(x_vals[-1], y_vals[-1])
+        y_i_predicted = y_vals[-4] + 4/3 * step_size * (2*f_i_3 - f_i_2 + 2*f_i_1)
+        f_i_predicted = equation.at(x_new, y_i_predicted)
+        y_i_corrected = y_vals[-2] + 1/3 * step_size * (f_i_2 + 4*f_i_1 + f_i_predicted)
+        y_new = y_i_corrected
+        return x_new, y_new
+
+
 class RungeRuleSolver:
 
     @staticmethod
@@ -220,7 +236,8 @@ def get_all_differential_equation_solvers() -> list[DifferentialEquationSolver]:
         NewtonSolver(),
         ModifiedNewtonSolver(),
         RungeKuttaSolver(),
-        AdamsSolver()
+        AdamsSolver(),
+        MilneSolver()
     ]
 
 
