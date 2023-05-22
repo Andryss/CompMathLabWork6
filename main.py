@@ -1,11 +1,12 @@
 import sys
 import warnings
 
-import matplotlib
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from solvers import *
+
+warnings.filterwarnings("ignore")
 
 
 def read_int_from_console(number_name: str) -> int:
@@ -85,8 +86,6 @@ def read_show_all() -> bool:
 
 
 def show_result_entity(micro_result: SolveResultEntity, info: DifferentialEquationInfo):
-    warnings.filterwarnings("ignore", category=matplotlib.MatplotlibDeprecationWarning)
-
     if isinstance(micro_result, SolveResultEntitySuccess):
         fig, ax = plt.subplots()
 
