@@ -67,7 +67,9 @@ def read_precision() -> float:
 def print_result_entity(micro_result: SolveResultEntity):
     if isinstance(micro_result, SolveResultEntitySuccess):
         print(f"\n{micro_result.name}")
-        print(f"{micro_result.approximated_values_table.table().T}")
+        table_result = micro_result.approximated_values_table
+        print(f"{table_result.table().T}")
+        print(f"with step: {table_result.x_values()[1] - table_result.x_values()[0]}")
     elif isinstance(micro_result, SolveResultEntityError):
         print(f"\n{micro_result.name}")
         print(f"{micro_result.error.__str__()}")
